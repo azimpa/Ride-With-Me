@@ -1,0 +1,25 @@
+{% extends 'adm/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="card mb-4" style="width: 100%;">
+  <div class="card-header">
+    <h2>Edit Product size</h2>
+    <form method="post" action="{% url 'edit_product_size' product_size.id %}">
+      {% csrf_token %}
+      <div class="col-md-6">
+        <label for="color">Color</label>
+        <input type="text" class="form-control" id="edited size" name="edited_size" value="{{product_size.name}}"  required>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Edit Size</button>
+    </form>
+  </div>
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show col-6" role="alert">
+    <strong></strong>{{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

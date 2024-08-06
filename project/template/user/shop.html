@@ -1,0 +1,130 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+
+{% block title %}
+Prooo
+{% endblock %}
+    <!-- PAGINATION -->
+    <nav aria-label="Page navigation example" class="mt-5 mb-5 d-inline-flex" style="justify-content: center;">
+        <ul class="pagination">
+            {% if product_shoes.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ product_shoes.previous_page_number }}">Prev</a></li>
+            {% endif %}
+
+            {% for page_num in product_shoes.paginator.page_range %}
+                <li class="page-item{% if page_num == product_shoes.number %} active{% endif %}">
+                    <a class="page-link" style="width: 50px; display: flex; justify-content: center;" href="?page={{ page_num }}">{{ page_num }}</a>
+                </li>
+            {% endfor %}
+
+            {% if product_shoes.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ product_shoes.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ product_shoes.paginator.num_pages }}">Last</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <!-- END PAGINATION -->
+</div>
+<script>
+    // Select the size checkboxes
+    const sizeCheckboxes = document.querySelectorAll('.size-checkbox');
+
+    // Listen for changes in the size checkboxes
+    sizeCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            updateFilters();
+        });
+    });
+
+    // Select the brand checkboxes
+    const brandCheckboxes = document.querySelectorAll('.brand-checkbox');
+
+    // Listen for changes in the brand checkboxes
+    brandCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            updateFilters();
+        });
+    });
+
+    // Select the color checkboxes
+    const colorCheckboxes = document.querySelectorAll('.color-checkbox');
+
+    // Listen for changes in the color checkboxes
+    colorCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            updateFilters();
+        });
+    });
+
+    function updateFilters() {
+        // Get the selected sizes
+        const selectedSizes = Array.from(sizeCheckboxes)
+            .filter((checkbox) => checkbox.checked)
+            .map((checkbox) => checkbox.value);
+
+        // Get the selected brands
+        const selectedBrands = Array.from(brandCheckboxes)
+            .filter((checkbox) => checkbox.checked)
+            .map((checkbox) => checkbox.value);
+
+        // Get the selected colors
+        const selectedColors = Array.from(colorCheckboxes)
+            .filter((checkbox) => checkbox.checked)
+            .map((checkbox) => checkbox.value);
+
+        // Update the URL with selected filters
+        const url = new URL(window.location.href);
+        url.searchParams.delete('size');
+        url.searchParams.delete('brand');
+        url.searchParams.delete('color');
+
+        selectedSizes.forEach((size) => {
+            url.searchParams.append('size', size);
+        });
+
+        selectedBrands.forEach((brand) => {
+            url.searchParams.append('brand', brand);
+        });
+
+        selectedColors.forEach((color) => {
+            url.searchParams.append('color', color);
+        });
+
+        window.location.href = url.toString();
+    }
+
+    // Show/hide additional items in filters
+    const showMoreSizesLink = document.getElementById('show-more-sizes');
+    const showMoreBrandsLink = document.getElementById('show-more-brands');
+    const showMoreColorsLink = document.getElementById('show-more-colors');
+
+    if (showMoreSizesLink) {
+        showMoreSizesLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const sizeFilter = document.querySelector('.size-checkbox');
+            sizeFilter.style.maxHeight = 'none';
+            showMoreSizesLink.style.display = 'none';
+        });
+    }
+
+    if (showMoreBrandsLink) {
+        showMoreBrandsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const brandFilter = document.querySelector('.brand-checkbox');
+            brandFilter.style.maxHeight = 'none';
+            showMoreBrandsLink.style.display = 'none';
+        });
+    }
+
+    if (showMoreColorsLink) {
+        showMoreColorsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const colorFilter = document.querySelector('.color-checkbox');
+            colorFilter.style.maxHeight = 'none';
+            showMoreColorsLink.style.display = 'none';
+        });
+    }
+</script>
+{% endblock %}

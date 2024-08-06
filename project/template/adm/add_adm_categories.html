@@ -1,0 +1,38 @@
+{% extends 'adm/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header text-center">
+        <h3>ADD CATEGORY</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <form method="post" action="{% url 'add_adm_categories' %}" class="mx-auto" style="max-width: 300px;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="category_name" style="margin-left: 80px;">CATEGORY NAME</label>
+                    <input type="text" class="form-control" id="category_name" name="category_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="category_offer" style="margin-left: 80px;">ADD OFFER</label>
+                    <select class="form-select" id="category_offer" name="category_offer">
+                        <option value="No Offer Available">No Offer Available</option>
+                        <option value="Special Category Offer">Special Category Offer</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-primary" style="width: 150px;">ADD CATEGORY</button>
+                </div>
+            </form>
+        </div>
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show col-6" role="alert">
+            <strong></strong>{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

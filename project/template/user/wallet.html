@@ -1,0 +1,111 @@
+{% block content %}
+<style>
+    body {
+        background-color: #f0f0f0;
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .wallet-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0 auto;
+    }
+
+    .wallet-box {
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 80%;
+        text-align: center;
+    }
+
+    .wallet-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .wallet-balance {
+        font-size: 36px;
+        font-weight: bold;
+        color: #4caf50;
+        margin-bottom: 10px;
+    }
+
+    .refund-section {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .refund-title {
+        font-weight: bold;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .refund-amount {
+        font-size: 18px;
+        color: #4caf50;
+    }
+
+    .transaction-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    .transaction-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 18px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+
+    hr {
+        border: 1px solid #ccc;
+        margin: 20px 0;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+<div class="wallet-container">
+    <div class="wallet-box">
+        <div class="wallet-title">WALLET BALANCE</div>
+        <div class="wallet-balance">₹ {{ user.wallet_balance }}</div>
+        <div class="refund-section">
+            <div class="refund-title">Latest refund amount:</div>
+            <div class="refund-amount">₹ {{ total_refund_amount }}</div>
+        </div>
+        <hr />
+
+        {% if order_items %}
+        <ul class="transaction-list">
+            <li class="transaction-item">
+                <h6 class="text-center"><strong>Last Transactions</strong></h6>
+            </li>
+            {% for item in order_items %}
+            <li class="transaction-item">
+                <span>Order ID: {{ item.order.id }}</span>
+                <span>Total Price: ₹ {{ item.order.total_price_tax }}</span> 
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-center">No recent transactions found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

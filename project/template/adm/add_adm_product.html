@@ -1,0 +1,98 @@
+{% extends 'adm/base.html' %}
+
+{% block content %}
+<div class="card mb-4">
+  <div class="card-header text-center">
+    <h3 class="card-title">ADD PRODUCT</h3>
+  </div>
+  <div class="card-body">
+    <form action="{% url 'add_adm_product' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="product_name" class="form-label">PRODUCT NAME</label>
+          <input type="text" class="form-control" id="product_name" name="product_name" required>
+        </div>
+        <div class="col-md-6">
+          <label for="product_images" class="form-label">IMAGES</label>
+          <input type="file" class="form-control" id="product_images" name="product_images" accept="image/*">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="product_brand" class="form-label">BRAND</label>
+          <input type="text" class="form-control" id="product_brand" name="product_brand" required>
+        </div>
+        <div class="col-md-6">
+          <label for="product_categories" class="form-label">CATEGORY</label>
+          <select class="form-select" id="product_categories" name="product_categories" required>
+            <option value="" disabled selected>Select a category</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="price">Price</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">&#8377;</span>
+            </div>
+            <input type="text" class="form-control" id="price" name="price" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="offer_price">Offer Price</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">&#8377;</span>
+            </div>
+            <input type="text" class="form-control" id="offer_price" name="offer_price" required>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="product_status" class="form-label">STATUS</label>
+          <select class="form-select" id="product_status" name="product_status" required>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="discount">Discount (%)</label>
+          <input type="text" class="form-control" id="discount_percentage" name="discount_percentage" required>
+        </div>
+        <div class="col-md-6">
+          <label for="product_description" class="form-label">DESCRIPTION</label>
+          <textarea class="form-control" id="product_description" name="product_description" rows="4"
+            required></textarea>
+        </div>
+        <div class="col-md-6">
+          <label for="offer_type" class="form-label">OFFER TYPE</label>
+          <select class="form-select" id="offer_type" name="offer_type" required>
+            <option value="Product Offer"></option>
+            <option value="No Offer Available">No Offer Available</option>
+            <option value="Special Product Offer">Special Product Offer</option>
+          </select>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">ADD PRODUCT</button>
+      </div>
+    </form>
+    <div class="row mt-3">
+      <div class="col">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'adm/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header text-center">
+        <h3>EDIT CATEGORY</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <form method="post" action="{% url 'edit_adm_categories' cat.id %}" class="mx-auto" style="max-width: 300px;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name" style="margin-left: 80px;">CATEGORY NAME</label>
+                    <input type="text" class="form-control" name="edited_category_name" value="{{ cat.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="edited_category_offer" style="margin-left: 80px;">CATEGORY NAME</label>
+                    <select class="form-control" id="edited_category_offer" name="edited_category_offer">
+                        <option value="No Offer Available" {% if cat.offer_type == 'No Offer Available' %}selected{% endif %}>No Offer Available
+                        </option>
+                        <option value="Special Category Offer" {% if cat.offer_type == 'Special Category Offer' %}selected{% endif %}>Special Category Offer
+                        </option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-primary" style="width: 150px;">SAVE EDITS</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

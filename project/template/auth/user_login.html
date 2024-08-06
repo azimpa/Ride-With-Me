@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>User Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'logcss/style.css' %}">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url({% static 'logimages/4.png' %});
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            /* Center the background image */
+        }
+
+        .login-wrap {
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .login-wrap h1 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .login-wrap h6 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group input {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .form-group .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .form-group button {
+            padding: 15px;
+            background-color: #3498db;
+            color: #fff;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #2980b9;
+        }
+
+        .form-group a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .form-group a:hover {
+            color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show col-6" role="alert">
+                        <strong></strong>{{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    <div class="login-wrap p-0">
+                        <form action="user_login" method="post">
+                            {% csrf_token %}
+                            <h1 class="heading-section">Welcome back!</h1>
+                            <h6 class="heading-section">Log In</h6>
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Email ID" name="email" required>
+                                <input type="text" class="form-control" placeholder="Referral Code (optional)" name="referral_code">
+                                <div style="position: relative;">
+                                    <input id="password-field" type="password" class="form-control" name="pass" placeholder="Password" required>
+                                    <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password" onclick="togglePasswordVisibility()"></span>
+                                </div>
+                                <button type="submit" class="form-control btn btn-secondary submit px-3">Log In</button>
+                            </div>                            
+                        </form>
+                        <div class="form-group d-md-flex justify-content-end">
+                            <a href="forgot_password">Forgot Password</a>
+                            <div>
+                                <p class="mb-0" style="display: inline;">Not an already registered user? </p>
+                                <a href="user_signup">Sign Up</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="{% static 'logjs/jquery.min.js' %}"></script>
+    <script src="{% static 'logjs/popper.js' %}"></script>
+    <script src="{% static 'logjs/bootstrap.min.js' %}"></script>
+    <script src="{% static 'logjs/main.js' %}"></script>
+</body>
+
+</html>

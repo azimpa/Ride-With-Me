@@ -1,0 +1,267 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+
+{% block title %}
+PROFILE
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container-fluid" style="background-color: rgb(212, 219, 219);">
+        <div class="row d-inline-flex mb-5" style="margin-top: 100px;">
+            <div class="col-lg-3 col-md-12 ms-5">
+                <div class="d-inline-flex p-2 mt-5"
+                    style="background-color: rgb(255, 255, 255); width: 260px; height: 60px; border: 0.3px solid rgb(235, 215, 215);box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <i class="bi bi-person ms-3" style="font-size: 28px;"></i>
+                    <h3 style="margin-left: 18px; margin-top: 3px; font-weight: bold;">Hello, {{username}}</h3>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div class="d-inline-flex p-2 mt-3"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <i class="bi bi-gear ms-3" style="font-size: 28px; color: rgb(65, 65, 184);"></i>
+                        <h6 style="margin-left: 18px; margin-top: 10px; color: rgb(146, 149, 152);">ACCOUNT SETTINGS
+                        </h6>
+                    </div>
+                    <div class="d-inline-flex p-2 d-flex justify-content-center"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <a href="{% url 'userprofile' %}"
+                            style="margin-right: 6px; margin-top: 10px; color: rgb(146, 149, 152); text-decoration: none;">Personal
+                            Information</a>
+                    </div>
+                    <div class="d-inline-flex p-2 d-flex justify-content-center"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <a href="{% url 'useraddress' %}"
+                            style="margin-right: 35px; margin-top: 10px; color: rgb(146, 149, 152); text-decoration: none;">Manage
+                            Address</a>
+                    </div>
+                    <div class="d-inline-flex p-2"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <i class="bi bi-cart4 ms-3" style="font-size: 28px; color: rgb(65, 65, 184);"></i>
+                        <a href="{% url 'my_orders' %}">
+                            <h6 style="margin-left: 17px; margin-top: 12px; color: rgb(146, 149, 152);">MY ORDERS</h6>
+                        </a>
+                        <i class="bi bi-arrow-right-circle"
+                            style="font-size: 15px; margin-top: 12px; color: rgb(146, 149, 152); margin-left: 70px;"></i>
+                    </div>
+                    <div class="d-inline-flex p-2"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <i class="bi bi-credit-card ms-3" style="font-size: 28px; color: rgb(65, 65, 184);"></i>
+                        <h6 style="margin-left: 17px; margin-top: 10px; color: rgb(146, 149, 152);">PAYMENT METHODS</h6>
+                    </div>
+                    <div class="d-inline-flex p-2 d-flex justify-content-center"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <p style="margin-right: 33px; margin-top: 10px; color: rgb(146, 149, 152);">Debit/Credit Cards
+                        </p>
+                    </div>
+                    <div class="d-inline-flex p-2"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <i class="bi bi-box ms-3" style="font-size: 28px; color: rgb(65, 65, 184);"></i>
+                        <h6 style="margin-left: 17px; margin-top: 10px; color: rgb(146, 149, 152);">MY STUFFS</h6>
+                    </div>
+                    <div class="d-inline-flex p-2 d-flex justify-content-center"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <a href="{% url 'wallet' %}" style="margin-right: 110px; margin-top: 10px; color: rgb(146, 149, 152);">Wallet</a>
+                    </div>
+                    <div class="d-inline-flex p-2 d-flex justify-content-center"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <p style="margin-right: 96px; margin-top: 10px; color: rgb(146, 149, 152);">Coupons</p>
+                    </div>
+                    <div class="d-inline-flex p-2 d-flex justify-content-center"
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <p style="margin-right: 79px; margin-top: 10px; color: rgb(146, 149, 152);">My Wishlist</p>
+                    </div>
+                    <div class="d-inline-flex p-2 "
+                        style="background-color: rgb(255, 255, 255); width: 260px; height: 60px;">
+                        <i class="bi bi-box-arrow-left ms-3" style="font-size: 28px; color: rgb(65, 65, 184);"></i>
+                        <a href="{% url 'user_logout' %}">
+                            <h6 style="margin-left: 17px; margin-top: 10px; color: rgb(146, 149, 152);">LOGOUT</h6>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% block profile %}
+            <div class="col-lg-8 col-md-6 bg-white mt-5 pb-5"
+                style="border: 0.3px solid rgb(255, 255, 255);box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <form action="{% url 'userprofile' %}" method="post">
+                    {% csrf_token %}
+                    <div class="mt-5 ms-5">
+                        <h2 class="d-inline-flex me-5" style="margin-left: 50px;">Personal Information</h2>
+                        <div style="margin-top: 40px; margin-left: 50px;">
+                            <div style="display: flex; align-items: center; margin-top: 40px;">
+                                <label for="first_name"
+                                    style="width: 100px; margin-right: 10px; margin-top: 20px;">First Name:</label>
+                                <input type="text" class="form-control mt-3" style="width: 300px;" id="first_name"
+                                    name="first_name" value="{{first_name}}" placeholder="{{first_name}}" required
+                                    onkeyup="validateFirstname()">
+                                <span id="firstname-error" style="margin-left: 15px; margin-top: 20px;"></span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-top: 40px;">
+                                <label for="last_name" style="width: 100px; margin-right: 10px; margin-top: 20px;">Last
+                                    Name:</label>
+                                <input type="text" class="form-control mt-3" style="width: 300px;" id="last_name"
+                                    name="last_name" value="{{last_name}}" placeholder="{{last_name}}" required
+                                    onkeyup="validateLastname()">
+                                <span id="lastname-error" style="margin-left: 15px; margin-top: 20px;"></span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-top: 40px;">
+                                <label for="gender" style="width: 100px; margin-top: 20px;">Gender:</label>
+                                <select class="form-control" style="width: 300px; margin-left: 10px;" name="gender" id="gender"
+                                    onchange="validateGender()" required>
+                                    <option value="">{{ gender }}</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                                <span id="gender-error" style="margin-left: 15px; margin-top: 20px;"></span>
+                            </div>                            
+                            <div style="display: flex; align-items: center; margin-top: 40px;">
+                                <label for="age"
+                                    style="width: 100px; margin-right: 10px; margin-top: 20px;">Age:</label>
+                                <input type="text" class="form-control mt-3" style="width: 300px;" id="age" name="age"
+                                    value="{{age}}" placeholder="{{age}}" onkeyup="validateAge()">
+                                <span id="age-error" style="margin-left: 15px; margin-top: 20px;"></span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-top: 40px;">
+                                <label for="email" style="width: 100px; margin-right: 10px; margin-top: 20px;">Email
+                                    Address:</label>
+                                <input type="email" class="form-control mt-3" style="width: 300px;" id="email"
+                                    name="email" value="{{email}}" placeholder="{{email}}" onkeyup="validateEmail()">
+                                <span id="email-error" style="margin-left: 15px; margin-top: 20px;"></span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-top: 40px;">
+                                <label for="phone_number"
+                                    style="width: 100px; margin-right: 10px; margin-top: 20px;">Phone Number:</label>
+                                <input type="tel" class="form-control mt-3" style="width: 300px;" id="phone_number"
+                                    name="phone_number" placeholder="{{phone}}" value="{{phone}}"
+                                    onkeyup="validatePhoneNumber()">
+                                <span id="phone_number-error" style="margin-left: 15px; margin-top: 20px;"></span>
+                            </div>
+                        </div>
+                        <div class="mt-4 ms-5" style="margin-left: 50px;">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                </form>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</section>
+<script>
+    $(document).on("submit", "form", function (e) {
+        if (
+            !validateFirstname() ||
+            !validateLastname() ||
+            !validateGender() ||
+            !validateAge() ||
+            !validateEmail() ||
+            !validatePhoneNumber()
+        ) {
+            e.preventDefault();
+            swal("Invalid data! Ensure you have entered correct data");
+        }
+    });
+
+    function validateFirstname() {
+        var firstname = $("#first_name").val().trim();
+        var required = 2;
+        var left = required - firstname.length;
+        if (firstname.length == 0) {
+            $("#firstname-error").html("Firstname is required").css("color", "red");
+            return false;
+        }
+        if (left > 0) {
+            $("#firstname-error").html(left + " more characters required").css("color", "red");
+            return false;
+        }
+        $("#firstname-error").html("First name is valid").css("color", "green");
+        return true;
+    }
+
+
+    function validateLastname() {
+        var lastname = $("#last_name").val().trim();
+        var required = 2;
+        var left = required - lastname.length;
+        if (lastname.length == 0) {
+            $("#lastname-error").html("Lastname is required").css("color", "red");
+            return false;
+        }
+        if (left > 0) {
+            $("#lastname-error").html(left + " more characters required").css("color", "red");
+            return false;
+        }
+        $("#lastname-error").html("lastname is valid").css("color", "green");
+        return true;
+    }
+
+    function validateGender() {
+        var gender = $("#gender").val().trim().toLowerCase(); // Convert to lowercase for case-insensitive comparison
+        var validGenders = ["male", "female", "others"];
+
+        if (validGenders.includes(gender)) {
+            $("#gender-error").html("Gender is valid").css("color", "green");
+            return true;
+        } else {
+            $("#gender-error").html("Invalid gender. Please enter Male, Female, or Others.").css("color", "red");
+            return false;
+        }
+    }
+
+
+    function validateAge() {
+        var age = $("#age").val().trim();
+        var ageError = $("#age-error");
+
+        // Check if age is not empty and is a valid number
+        if (age === "" || isNaN(age)) {
+            ageError.html("Age must be a valid number").css("color", "red");
+            return false;
+        }
+
+        // Convert age to a number
+        age = parseInt(age);
+
+        // Check if age is within the specified range
+        if (age >= 10 && age <= 100) {
+            ageError.html("Age is valid").css("color", "green");
+            return true;
+        } else {
+            ageError.html("Invalid age. Age must be between 10 and 100").css("color", "red");
+            return false;
+        }
+    }
+
+    function validateEmail() {
+        var email = $("#email").val().trim();
+        if (email.length == 0) {
+            $("#email-error").html("Email is Required").css("color", "red");
+            return false;
+        }
+        var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!email.match(emailPattern)) {
+            $("#email-error").html("Email is Invalid").css("color", "red");
+            return false;
+        }
+        $("#email-error").html("Email is valid").css("color", "green");
+        return true;
+    }
+
+
+    function validatePhoneNumber() {
+        var phoneNumber = $("#phone_number").val().trim();
+        var num = phoneNumber.replace(/[^\d]/g, "");
+        console.log(num);
+        if (num.length == 0) {
+            $("#phone_number-error").html("Phone number is Required").css("color", "red");
+            return false;
+        }
+        if (num.length < 10 || num.length > 14) {
+            $("#phone_number-error").html("Phone number should be between 10 and 14 digits").css("color", "red");
+            return false;
+        }
+        $("#phone_number-error").html("Phone number is valid").css("color", "green");
+        return true;
+    }
+</script>
+{% endblock %}

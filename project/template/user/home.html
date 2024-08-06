@@ -1,0 +1,161 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Home Slider -->
+<div class="home">
+	<div class="home_slider_container">
+		<div class="owl-carousel owl-theme home_slider">
+			<div class="owl-item">
+				<div class="home_slider_background" style="background-image: url('{% static 'images\1.png' %}');">
+				</div>
+				<div class="home_slider_content">
+					<div class="home_slider_content_inner">
+						<div class="home_slider_subtitle">RWM</div>
+						<div class="home_slider_title">RIDE WITH ME</div>
+					</div>
+				</div>
+			</div>
+			<div class="owl-item">
+				<div class="home_slider_background" style="background-image: url('{% static 'images\2.png' %}');">
+				</div>
+				<div class="home_slider_content">
+					<div class="home_slider_content_inner">
+						<div class="home_slider_subtitle">RWM</div>
+						<div class="home_slider_title">RIDE WITH ME</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- New Arrivals -->
+<div class="arrivals">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="section_title_container text-center">
+					<div class="section_subtitle">only the best</div>
+					<div class="section_title">new arrivals</div>
+				</div>
+			</div>
+		</div>
+		<div class="row products_container">
+			<div class="col-lg-4 product_col">
+				<div class="product">
+					<div class="product_image">
+						<img src="{% static 'images\Road Bikes 2.webp' %}" alt="">
+					</div>
+					<div class="rating rating_4">
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+					</div>
+					<div class="product_content clearfix">
+						<div class="product_info">
+							<div class="product_name">
+								<a href="product.html">Ultimate CFR Di2</a>
+							</div>
+							<div class="product_price">7,61,165.00 INR</div>
+						</div>
+						<div class="product_options">
+							<div class="product_buy product_option">
+								<img src="{% static 'images/shopping-bag-white.svg' %}" alt="">
+							</div>
+							<div class="product_fav product_option">+</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 product_col">
+				<div class="product">
+					<div class="product_image">
+						<img src="{% static 'images\Gravel Bikes 2.webp' %}" alt="">
+					</div>
+					<div class="rating rating_4">
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+					</div>
+					<div class="product_content clearfix">
+						<div class="product_info">
+							<div class="product_name">
+								<a href="product.html">Grizl CF SLX 8 Di2</a>
+							</div>
+							<div class="product_price">3,80,536.69 INR</div>
+						</div>
+						<div class="product_options">
+							<div class="product_buy product_option">
+								<img src="{% static 'images/shopping-bag-white.svg' %}" alt="">
+							</div>
+							<div class="product_fav product_option">+</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 product_col">
+				<div class="product">
+					<div class="product_image">
+						<img src="{% static 'images\Mountain Bikes 2.webp' %}" alt="">
+					</div>
+					<div class="rating rating_4">
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+					</div>
+					<div class="product_content clearfix">
+						<div class="product_info">
+							<div class="product_name">
+								<a href="product.html">Sender CFR Mullet</a>
+							</div>
+							<div class="product_price">4,78,753.52 INR</div>
+						</div>
+						<div class="product_options">
+							<div class="product_buy product_option">
+								<img src="{% static 'images/shopping-bag-white.svg' %}" alt="">
+							</div>
+							<div class="product_fav product_option">+</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col text-center">
+				<div class="button arrivals_button"><a href="{% url 'total_products' %}">view more</a></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Gallery -->
+<div class="gallery">
+	<div class="gallery_image" style="background-image: url('{% static 'images\3.jpg' %}')"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="gallery_title text-center">
+					<ul>
+						<li><a href="#">#roadbikes</a></li>
+						<li><a href="#">#ridewithme</a></li>
+						<li><a href="#">#gravelbikes</a></li>
+					</ul>
+				</div>
+				<div class="gallery_text text-center">
+					For years, we've recognized that bicycles will revolutionize the world. Therefore, we
+					wholeheartedly invest our efforts in this endeavor. No diversions, no distractions, no
+					pretending to be what we're not. Only exceptional bicycles.
+				</div>
+				<div class="button gallery_button"><a href="#">submit</a></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

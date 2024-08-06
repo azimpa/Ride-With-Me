@@ -1,0 +1,177 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    .card {
+        height: 480px;
+        /* Set the card's height */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease-in-out;
+    }
+
+
+    .card-image {
+        width: 100%;
+        height: 150px;
+        /* Set the image's height to match the card's height */
+        object-fit: cover;
+        /* Ensure the image fits within the specified height */
+        border-bottom: 1px solid #ccc;
+    }
+</style>
+<div style="margin-top: 150px;">
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-3 col-md-12">
+                <form method="GET" action="{% url 'total_products' %}">
+                    {% csrf_token %}
+                    <div class="border-bottom mb-4 pb-4">
+                        <h5 class="font-weight-semi-bold mb-4">Filter by Category</h5>
+                        <div class="mt-3">
+                            {% for category in category %}
+                            <div class="filter-checkbox">
+                                <input type="checkbox" id="category-{{ category.name }}" class="category-checkbox"
+                                    name="category" value="{{ category.name }}" {% if category.name in selected_category %}checked{% endif %}>
+                                <label for="category-{{ category.name }}">{{ category.name }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="border-bottom mb-4 pb-4">
+                        <h5 class="font-weight-semi-bold mb-4">Filter by color</h5>
+                        <div class="mt-3">
+                            {% for color in colors %}
+                            <div class="filter-checkbox">
+                                <input type="checkbox" id="color-{{ color.name }}" class="color-checkbox" name="color"
+                                    value="{{ color.name }}" {% if color.name in selected_colors %}checked{% endif %}>
+                                <label for="color-{{ color.name }}">{{ color.name }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <h5 class="font-weight-semi-bold mb-4">Filter by size</h5>
+                        <div class="mt-3">
+                            {% for size in sizes %}
+                            <div class="filter-checkbox">
+                                <input type="checkbox" id="size-{{ size.name }}" class="size-checkbox" name="size"
+                                    value="{{ size.name }}" {% if size.name in selected_sizes %}checked{% endif %}>
+                                <label for="size-{{ size.name }}">{{ size.name }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </form>
+            </div>
+            <div class="col-lg-9 col-md-12" id="product-list">
+                <div class="row pb-3">
+                    <div class="col-12 pb-1">
+                        <form method="POST" action="{% url 'total_products' %}">
+                            {% csrf_token %}
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="input-group">
+                                    <input type="text" id="searchInput" class="form-control" placeholder="Search by name" name="name_search">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="input-group-text bg-transparent text-primary">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="dropdown ml-4">
+                                    <button class="btn border dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Sort by
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sortDropdown">
+                                        <button class="dropdown-item" type="submit" name="sort" value="Low to High">Low to High</button>
+                                        <button class="dropdown-item" type="submit" name="sort" value="High to Low">High to Low</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>                        
+                    </div>
+                    {% for product in products %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 pb-3">
+                        <div class="card product-item border-0 mb-4">
+                            {% for var in product.images.all %}
+                            {% if forloop.first %}
+                            <div
+                                class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                <img class="img-fluid card-image" src="{{ var.image.url }}" alt="">
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="card-body border-left border-right text-center p-3">
+                                <h6 class="text-truncate mb-2"><strong>{{ product }}</strong></h6>
+                                <div class="d-flex flex-column align-items-center mb-2">
+                                    <div class="card-body text-center p-1">
+                                        <div class="d-flex justify-content-center">
+                                            <span class="text-success fixed-price">&#8377;{{product.offer_price}}</span>
+                                            <span class="text-muted fixed-price"><del>&#8377;{{product.price}}</del></span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-center p-1">
+                                        <span class="text-muted"><strong>Category:</strong></span>
+                                        <span class="fixed-color">{{ product.product.category }}</span>
+                                    </div>
+                                    <div class="card-body text-center p-1">
+                                        <span class="text-muted"><strong>Discount:</strong></span>
+                                        <span class="fixed-color">{{ product.product.discount_percentage }}%</span>
+                                    </div>
+                                    <div class="card-body text-center p-1">
+                                        <span class="text-muted"><strong>Current Offer:</strong></span>
+                                        {% if product.category.offer_type == 'Special Category Offer' %}
+                                        <span class="fixed-color"><br>{{ product.category.offer_type}}</span>
+                                        {% else %}
+                                        <span class="fixed-color"><br>{{ product.offer_type }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="card-body text-center p-1">
+                                        <span class="text-muted"><strong>Color:</strong></span>
+                                        <span class="fixed-color">{{ product.color }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-muted"><strong>Size:</strong></span>
+                                        <span class="fixed-size">{{ product.size }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                <a href="{% url 'product_description' id=product.id %}"
+                                    class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
+                                    Detail</a>
+                                <a href="{% url 'add_to_cart' id=product.id %}" class="btn btn-sm text-dark p-0"><i
+                                        class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="col-12 pb-1">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center mb-3">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
