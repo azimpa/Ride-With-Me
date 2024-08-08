@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-fbrza)8n0m65y56j-r=h3m=qx=pt-6n1u0_fewg7d^u%o-^hcs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -85,7 +85,7 @@ DATABASES = {
         "NAME": config("NAME"),
         "USER": config("USER"),
         "PASSWORD": config("PASSWORD"),
-        "HOST": config("PASSWORD"),
+        "HOST": "localhost",
         "PORT": "5432",
     }
 }
@@ -125,11 +125,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-# STATICFILES_DIRS = [BASE_DIR / "static",]
 
-STATIC_URL = "static/"
-# STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = os.path.join(BASE_DIR, "static/")
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -137,18 +139,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MESSAGE_TAGS = {
-    messages.ERROR: "danger",  
-    messages.WARNING: "warning", 
+    messages.ERROR: "danger",
+    messages.WARNING: "warning",
     messages.SUCCESS: "success",
-
 }
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = "accounts.CustomUser"
 
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
-TIME_ZONE = 'Asia/Kolkata'
-
+TIME_ZONE = "Asia/Kolkata"
