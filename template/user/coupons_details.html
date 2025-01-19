@@ -1,0 +1,124 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .section-title {
+        margin-top: 30px;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .card {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        width: 60%;
+        /* Adjust the width as needed */
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+    }
+
+    .card h6 {
+        color: #007bff;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    /* Smooth hover transition */
+    .transition {
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Add subtle box shadow to cards */
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Add a subtle gradient background to cards on hover */
+    .card:hover {
+        background: linear-gradient(45deg, #f9f9f9, #f0f0f0);
+    }
+
+    /* Adjust margin and padding for better spacing */
+    .card {
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    /* Increase font size for section title */
+    .section-title {
+        font-size: 28px;
+    }
+
+    /* Add a bottom border to section title */
+    .section-title {
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+</style>
+<div style="margin-top: 150px">
+    <div class="container">
+        <div class="text-center">
+            <div class="test_title">
+                <h2> <strong>COUPONS</strong></h2>
+                <h6><strong>Available Coupons</strong></h6>
+            </div>
+            {% for coupon in coupons %}
+            <div style="display: flex;justify-content: center;align-items: center;height: 60vh;">
+                <div class="card">
+                    <h6 style="margin-top: 10px" class="test_title">
+                        <strong>{{ coupon.coupon_code }}</strong>
+                    </h6>
+                    <p>{{ coupon.description }}</p>
+                    <p>
+                        You should purchase for a minimum of
+                        <strong>{{ coupon.minimum_amount }}</strong>
+                    </p>
+                    <p>Discount amount: <strong>{{ coupon.discount }}</strong></p>
+                    <p>Valid from: <strong>{{ coupon.valid_from }}</strong></p>
+                    <p>Valid to: <strong>{{ coupon.valid_to }}</strong></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    .card {
+        border: 2px solid #000000;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: #000000;
+        color: rgb(255, 254, 254);
+        border-radius: 8px 8px 0 0;
+    }
+
+    .product-details .item {
+        padding: 10px;
+    }
+
+    .product-details .item img {
+        max-width: 220px;
+        max-height: 120px;
+    }
+
+    /* Custom styling for order item details */
+    .order-item-card {
+        border: 1px solid #dcdcdc;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .order-item-card .card-body {
+        padding: 15px;
+    }
+
+    .order-item-card .row {
+        align-items: center;
+    }
+
+    .order-item-card img {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 5px;
+    }
+
+    .order-item-card .item-details {
+        padding-left: 20px;
+    }
+
+    .order-item-card .item-details h5 {
+        margin: 0;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .order-item-card .item-details strong {
+        font-weight: bold;
+    }
+
+    /* Updated styling for shipping address */
+    .shipping-address {
+        margin-bottom: 10px;
+    }
+
+    .shipping-address p {
+        margin: 5px 0;
+    }
+
+    /* Updated styling for the layout */
+    .container {
+        margin-top: 50px;
+        /* Adjusted margin-top */
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .col-md-6,
+    .col-md-12 {
+        width: 48%;
+        /* Adjusted width */
+    }
+
+    .col-md-12 {
+        width: 100%;
+        /* Adjusted width for the single column */
+    }
+
+    .col-md-6 .total-section {
+        margin-bottom: 15px;
+        /* Adjusted margin */
+    }
+
+    .col-md-6 .total-section h6 {
+        font-size: 1em;
+        /* Adjusted font size */
+    }
+</style>
+<div style="margin-top: 150px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="text-center" style="color: aliceblue;"><strong>ORDER SUMMARY</strong></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <p class="lead mb-0">
+                                Dear <span class="text-primary"><strong>{{ username }}</strong></span>,
+                                <br>Thank you for placing your order with us. <br>We appreciate your business and will
+                                process your order as soon as possible.
+                                <a href="{% url 'invoice' address_id=address.id order_id=orders.id %}">
+                                    <h6 style="display: flex; justify-content: end;">View Order Invoice</h6>
+                                </a>
+                            </p>
+                        </div>
+
+                        {% for item in order_items %}
+                        <div class="card order-item-card">
+                            <div class="card-body">
+                                <div class="row product-details">
+                                    <div class="col-md-3 item">
+                                        {% for img in item.product.images.all %}
+                                        {% if forloop.first %}
+                                        <img src="{{ img.image.url }}" alt="Product Image" class="img-fluid" />
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-9 item-details">
+                                        <h5><strong>Product Name:</strong> {{ item.product }}</h5>
+                                        <h5><strong>Price:</strong> ₹{{ item.product.offer_price }}</h5>
+                                        <h5><strong>Quantity:</strong> {{ item.quantity }}</h5>
+                                        <h5><strong>Total Price:</strong> ₹{{ item.total_price_each }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="total-section">
+                                    <h5><strong>Payment Method</strong></h5>
+                                    <h6>{{ orders.payment_method }}</h6>
+                                </div>
+                                <div class="shipping-address">
+                                    <h5><strong>Shipping Address</strong></h5>
+                                    <h6>
+                                        <strong>Name:</strong> {{ address.name }}<br />
+                                        <strong>Post Office:</strong> {{ address.postoffice }}<br />
+                                        <strong>Street:</strong> {{ address.street }}<br />
+                                        <strong>City:</strong> {{ address.city }}<br />
+                                        <strong>State:</strong> {{ address.state }}<br />
+                                        <strong>Country:</strong> {{ address.country }}<br />
+                                        <strong>Pin Code:</strong> {{ address.pin_code }}
+                                    </h6>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="total-section">
+                                    <h5><strong>Total Price</strong></h5>
+                                    <h6>₹{{ order_total_price }}</h6>
+                                </div>
+                                {% if discount > 0 %}
+                                <div class="total-section">
+                                    <h5><strong>Discount</strong></h5>
+                                    <h6>₹{{ discount }}</h6>
+                                </div>
+                                {% endif %}
+                                <div class="total-section">
+                                    <h5><strong>Shipping Fee</strong></h5>
+                                    <h6>₹50</h6>
+                                </div>
+                                <div class="total-section">
+                                    <div class="total-section">
+                                        <h5><strong>Applicable Tax Rate</strong></h5>
+                                        <h6>2%</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row" style="display: flex; justify-content: flex-end; align-items: flex-end;">
+                            <div class="col-md-12">
+                                <h5 style="text-align: center;"><strong>Total Amount (Inclusive of Taxes and Shipping)</strong></h5>
+                                <h5 style="text-align: center;"><strong>₹{{ total_price_tax }}</strong></h5>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

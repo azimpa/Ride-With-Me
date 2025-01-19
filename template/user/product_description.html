@@ -1,0 +1,393 @@
+{% extends 'user/base_user.html' %}
+
+{% block content %}
+<style>
+    /* Add a container for better layout control */
+    .product-container {
+        margin-top: 150px;
+        padding: 20px;
+    }
+
+    .carousel-image {
+        object-fit: cover;
+        width: auto;
+        /* Change this value to the desired width */
+        height: 360px;
+    }
+
+    /* Custom styles */
+    .product_content {
+        background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    .product_name {
+        font-size: 32px;
+        /* Increase font size for emphasis */
+        color: #222;
+        /* Slightly darker text color */
+        font-weight: 600;
+        /* Use a slightly bolder font-weight */
+        margin-bottom: 15px;
+        /* Increase spacing to provide separation */
+        text-transform: capitalize;
+        /* Capitalize the product name */
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+        /* Add subtle text shadow */
+        letter-spacing: 0.5px;
+        /* Slightly increase letter spacing for readability */
+    }
+
+
+    .product_price {
+        font-size: 32px;
+        /* Larger font size */
+        color: #ff5722;
+        font-weight: bold;
+        /* Emphasize the price */
+        background: linear-gradient(to right, #ff5722, #ff8c4b);
+        /* Gradient background */
+        -webkit-background-clip: text;
+        /* Clip text to the gradient */
+        color: transparent;
+        /* Make text transparent */
+        display: inline-block;
+        /* Allow gradient background to work */
+        padding: 5px 10px;
+        /* Add padding for spacing */
+        border-radius: 5px;
+        /* Rounded corners */
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        /* Subtle shadow */
+    }
+
+    .product_offer_price {
+        font-size: 20px;
+        color: #555;
+        /* Slightly darker gray for better readability */
+        margin-left: 10px;
+        text-decoration: line-through;
+        position: relative;
+        /* To allow for pseudo-elements */
+    }
+
+    /* Add a pseudo-element for a more professional look */
+    .product_offer_price::before {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        /* Adjust this value to control the distance from the text */
+        left: 0;
+        right: 0;
+        height: 1px;
+        /* Adjust this value to control the underline thickness */
+        background-color: #555;
+        /* Match text color */
+    }
+
+    /* Add a subtle hover effect for interactivity */
+    .product_offer_price:hover {
+        color: #333;
+        /* Darker color on hover */
+        text-decoration: none;
+        /* Remove the line-through on hover */
+        transition: color 0.3s ease, text-decoration 0.3s ease;
+    }
+
+    .product_discount {
+        display: inline-flex;
+        align-items: center;
+        font-size: 18px;
+        color: #555;
+        margin-left: 10px;
+        font-weight: bold;
+    }
+
+    .product_discount::before {
+        content: "";
+        display: inline-block;
+        height: 2px;
+        width: 20px;
+        background-color: #555;
+        margin-right: 8px;
+    }
+
+    .product_offer_type {
+        font-size: 18px;
+        color: #4caf50;
+        font-weight: bold;
+        margin-left: 20px;
+    }
+
+    .product_size {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 50%;
+        margin-right: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    .product_size:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .product_color {
+        display: inline-block;
+        padding: 5px 10px;
+        color: #333;
+        background-color: #f8f8f8;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: background-color 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    .product_text {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #555;
+    }
+
+    .dropdown-header {
+        font-weight: bold;
+        color: #333;
+    }
+</style>
+<div class="product-container">
+    <div class="content_wrapper mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div id="productImageCarousel" class="carousel slide product_image_large" data-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for image in products.images.all %}
+                            <div class="carousel-item magnify {% if forloop.first %}active{% endif %} ">
+                                <img src="{{ image.image.url }}" class="d-block w-100 carousel-image" alt="" />
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#productImageCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#productImageCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-5" style="margin-top: -10px">
+                    <div class="product_content">
+                        <h2 class="font-weight-bold product_name" id="product_name">{{ products.product }}</h2>
+                        <div class="mb-3"> <!-- Added margin-bottom -->
+                            <span class="font-weight-bold product_price" id="product_price">&#8377;
+                                {{products.offer_price }}</span>
+                            <span class="product_offer_price" id="product_offer_price"><del>&#8377;
+                                    {{products.price}}</del></span>
+                        </div>
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <h2 style="font-weight: bold; font-size: 30px; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif">{{products.product.category}}</h2>
+                        </div>                                            
+                        <div class="d-flex flex-wrap align-items-center mb-3 mt-4">
+                            <span class="product_discount"
+                                id="product_discount">{{products.product.discount_percentage}}% OFF</span>
+                            <span class="product_offer_type"
+                            {% if products.product.category.offer_type == 'Special Category Offer' %}
+                            id="product_offer_type">{{products.product.category.offer_type}}</span>
+                            {% else %}
+                            id="product_offer_type">{{products.product.offer_type}}</span>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center mb-3">
+                            <!-- Improved alignment and added margin-bottom -->
+                            <span class="product_size" id="product_size">{{ products.size }}</span>
+                            <span class="product_color ml-3" id="product_color">Color: {{ products.color }}</span>
+                            <!-- Improved margin -->
+                        </div>
+                        <div class="product_text">
+                            <p>{{ products.product.description }}</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="dropdown mr-3">
+                                <button class="btn btn-outline-dark" type="button" id="colorDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Color
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="colorDropdown">
+                                    <div class="dropdown-header">Select Color</div>
+                                    {% for color in colors %}
+                                    <a class="dropdown-item" href="#">
+                                        <input type="radio" id="color_radio_{{ color.id }}" name="selected_color"
+                                            class="regular_radio radio_color" value="{{ color.id }}" />
+                                        <label for="color_radio_{{ color.id }}">{{ color.name }}</label>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-dark" type="button" id="sizeDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Size
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="sizeDropdown">
+                                    <div class="dropdown-header">Select Size</div>
+                                    {% for size in sizes %}
+                                    <a class="dropdown-item" href="#">
+                                        <input type="radio" id="size_radio_{{ size.id }}" name="selected_size"
+                                            class="regular_radio radio_size" value="{{ size.id }}" />
+                                        <label for="size_radio_{{ size.id }}">{{ size.name }}</label>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product_size_container mt-3 text-center">
+                            <button class="btn btn-success btn-lg add-to-cart mx-auto"
+                                data-variant-id="{{ default_variant_id }}"
+                                style="background-color: #000000; border-color: #000000;">
+                                ADD TO CART
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Check if jQuery is defined before using it
+    if (typeof jQuery !== 'undefined') {
+        $(document).ready(function () {
+            // Define the getCookie function
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            // Function to update product details based on selected size and color
+            function updateProductDetails() {
+                var selectedSize = $("input[name='selected_size']:checked").val();
+                var selectedColor = $("input[name='selected_color']:checked").val();
+
+                // Make an AJAX request to your view function with the selected size and color
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'product_description' products.id %}",
+                    data: {
+                        selected_size: selectedSize,
+                        selected_color: selectedColor
+                    },
+                    success: function (data) {
+                        // Update the product details on the page
+                        $("#product_name").text(data.products.name);
+                        $("#product_price").text("₹ " + data.variants[0].offer_price);
+                        $("#product_offer_price").html("<del>₹ " + data.variants[0].price + "</del>");
+                        $("#product_color").text(data.variants[0].color_name);
+                        $("#product_size").text(data.variants[0].size_name);
+                        // Update other product details as needed
+
+                        // Update the carousel images based on the selected color
+                        updateCarouselImages(data.variants[0].color_image_urls);
+
+                        // Update the data-variant-id attribute of the "ADD TO CART" button
+                        $(".add-to-cart").data("variant-id", data.variants[0].id);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle AJAX errors here (e.g., display an error message)
+                        console.error("AJAX error:", status, error);
+                    }
+                });
+            }
+
+
+            // Function to update carousel images
+            function updateCarouselImages(imageUrls) {
+                var carouselInner = $("#productImageCarousel .carousel-inner");
+                carouselInner.empty(); // Clear existing images
+
+                // Append new images based on the selected color
+                for (var i = 0; i < imageUrls.length; i++) {
+                    var image = $("<img>").addClass("d-block w-100 carousel-image");
+                    image.attr("src", imageUrls[i]);
+
+                    var carouselItem = $("<div>").addClass("carousel-item", "magnify");
+                    if (i === 0) {
+                        carouselItem.addClass("active");
+                    }
+
+                    carouselItem.append(image);
+                    carouselInner.append(carouselItem);
+                }
+            }
+
+            // Attach change event handlers to the radio buttons
+            $("input[name='selected_size'], input[name='selected_color']").change(function () {
+                updateProductDetails();
+            });
+
+            // Add to Cart functionality
+            $(".add-to-cart").click(function () {
+                var selectedSize = $("input[name='selected_size']:checked").val();
+                var selectedColor = $("input[name='selected_color']:checked").val();
+
+                // Get the data-variant-id attribute from the clicked button
+                var variantId = $(this).data("variant-id");
+
+                // Make an AJAX request to add the selected variant to the cart
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'add_to_cart' 0 %}".replace(0, variantId),
+                    data: {
+                        variant_id: variantId,
+                        selected_size: selectedSize,
+                        selected_color: selectedColor
+                    },
+                    // Include the CSRF token in the headers
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    success: function (response) {
+                        // Handle the response from the server, e.g., show a success message
+                        alert("Item added to cart!");
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle AJAX errors here (e.g., display an error message)
+                        console.error("AJAX error:", status, error);
+                    }
+                });
+
+
+                // Initialize product details
+                updateProductDetails();
+            });
+        });
+    } else {
+        console.error("jQuery is not defined. Make sure to include jQuery before this script.");
+    }
+</script>
+{% endblock %}

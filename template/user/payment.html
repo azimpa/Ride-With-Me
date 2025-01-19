@@ -1,0 +1,167 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #000000;
+    }
+
+    .container {
+        margin-top: 180px;
+    }
+
+    .checkout-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+        /* Center the text */
+    }
+
+    .cart-total-title {
+        font-weight: bold;
+    }
+
+    .cart-total-price {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .total-row {
+        font-size: 16px;
+    }
+
+    .payment-options {
+        margin-top: 2rem;
+        text-align: center;
+        /* Center the text */
+    }
+
+    .form-check-label {
+        font-weight: bold;
+    }
+
+    .payment-option img {
+        margin-right: 10px;
+    }
+
+    .cart-total-button {
+        margin-top: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        padding: 10px 20px;
+        color: #ffffff;
+        background-color: #000000;
+        border-radius: 2px;
+    }
+
+    .cart-total-button:hover {
+        background-color: #5b565a;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="cart-details">
+                <form action="{% url 'payment' address_id %}" method="post">
+                    {% csrf_token %}
+                    <div class="checkout-title">
+                        PAYMENT INFORMATION
+                    </div>
+                    <div class="cart-total">
+                        <ul class="list-group mt-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="cart-total-title">Total Cart Value</span>
+                                <span class="cart-total-price">{{total_price}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="cart-total-title">Shipping Fee</span>
+                                <span class="cart-total-price">₹ 50</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="cart-total-title">Applicable Tax Rate</span>
+                                <span class="cart-total-price">2%</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center total-row">
+                                <span class="cart-total-title">Total Amount (Inclusive of Taxes and Shipping)</span>
+                                <span class="cart-total-price">₹{{total_price_tax}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="payment-options mt-3">
+                        <div class="form-check">
+                            <input type="radio" id="radio_payment_1" name="cash_on_delivery" class="form-check-input">
+                            <label for="radio_payment_1" class="form-check-label">CASH ON DELIVERY</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="rzp-button1" name="razorpay" class="form-check-input" checked>
+                            <label for="radio_payment_2" class="form-check-label">RAZORPAY</label>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3"> <!-- Center the button -->
+                        <button type="submit" class="cart-total-button btn btn-primary">Place Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    // JavaScript to handle radio button behavior
+    const cashOnDeliveryRadio = document.getElementById('radio_payment_1');
+    const razorpayRadio = document.getElementById('rzp-button1');
+
+    cashOnDeliveryRadio.addEventListener('change', function () {
+        if (cashOnDeliveryRadio.checked) {
+            razorpayRadio.checked = false;
+        }
+    });
+
+    razorpayRadio.addEventListener('change', function () {
+        if (razorpayRadio.checked) {
+            cashOnDeliveryRadio.checked = false;
+        }
+    });
+
+
+    // Your existing Razorpay code here
+    var address_id = "{{ address_id }}";
+    console.log("Address ID:", address_id);
+    var total_price_tax = "{{ total_price_tax }}";
+    var options = {
+        key: "rzp_test_J4ItW79ImKNvlW",
+        amount: Number("{{total_price_tax}}") * 100,
+        currency: "INR",
+        name: "RWM",
+        description: "Thanks",
+        image: "http://127.0.0.1:8000/static/images/rwm-logo.png",
+        order_id: "{{payment.id}}",
+        handler: function (response) {
+            window.location.href = `http://127.0.0.1:8000/razorpay/${address_id}/${total_price_tax}`;
+        },
+        theme: {
+            color: "#3399cc",
+        },
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on("payment.success", function (response) {
+        // Submit the form after successful payment
+        document.getElementById("payment-form").submit();
+    });
+    rzp1.on("payment.failed", function (response) {
+        // Handle failed payment here
+        alert("Payment failed");
+    });
+    document.getElementById("rzp-button1").onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    };
+</script>
+{% endblock %}

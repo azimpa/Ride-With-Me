@@ -1,0 +1,237 @@
+{% extends 'user/base_user.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 120px;">
+    <div class="card">
+        <div class="card-body">
+            <form action="{% url 'edit_address' address.id %}" method="post">
+                {% csrf_token %}
+                <div class="form-row text-center mb-4">
+                    <div class="col">
+                        <h2>Edit Address</h2>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="Edited_Housename_companyname">House Name or Company Name:</label>
+                        <input type="text" class="form-control" id="Edited_Housename_companyname"
+                            name="Edited_Housename_companyname" value="{{address.name}}" onkeyup="validateName()">
+                            <div id="name-error"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="Edited_Post_office">Post Office:</label>
+                        <input type="text" class="form-control" id="Edited_Post_office" name="Edited_Post_office"
+                            value="{{address.postoffice}}" onkeyup="validatePostoffice()">
+                            <div id="postoffice-error"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="Edited_Street">Street:</label>
+                        <input type="text" class="form-control" id="Edited_Street" name="Edited_Street"
+                            value="{{address.street}}" onkeyup="validateStreet()">
+                            <div id="street-error"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="Edited_City">City:</label>
+                        <input type="text" class="form-control" id="Edited_City" name="Edited_City"
+                            value="{{address.city}}" onkeyup="validateCity()">
+                            <div id="city-error"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="Edited_State">State:</label>
+                        <input type="text" class="form-control" id="Edited_State" name="Edited_State"
+                            value="{{address.state}}" onkeyup="validateState()">
+                            <div id="state-error"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="Edited_Country">Country:</label>
+                        <input type="text" class="form-control" id="Edited_Country" name="Edited_Country"
+                            value="{{address.country}}" onkeyup="validateCountry()">
+                            <div id="country-error"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="Edited_Pin_code">Pin Code:</label>
+                        <input type="text" class="form-control" id="Edited_Pin_code" name="Edited_Pin_code"
+                            value="{{address.pin_code}}" onkeyup="validatePincode()">
+                            <div id="pincode-error"></div>
+                    </div>
+                </div>
+                <div class="form-row text-center">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">SAVE EDITS</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("submit", "form", function (e) {
+        if (
+            !validateName() ||
+            !validatePostoffice() ||
+            !validateStreet() ||
+            !validateCity() ||
+            !validateState() ||
+            !validateCountry() ||
+            !validatePincode()
+        ) {
+            e.preventDefault();
+            swal("Invalid data! Ensure you have entered correct data");
+        }
+    });
+
+    function validateName() {
+        var name = $("#Edited_Housename_companyname").val().trim();
+        var required = 2;
+        var pattern = /^[A-Za-z\s]+ \([A-Za-z\s]+\)$/; // Allow letters and spaces in the format "Name (Suffix)"
+
+        if (name.length === 0) {
+            $("#name-error").html("House Name or Company Name is required").css("color", "red");
+            return false;
+        }
+
+        if (name.length < required || !pattern.test(name)) {
+            $("#name-error").html("Please enter a valid name like 'AWXWDS (H)'").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#name-error").html("House Name or Company Name is valid").css("color", "green");
+        return true;
+    }
+
+    function validatePostoffice() {
+        var postoffice = $("#Edited_Post_office").val().trim();
+        var required = 2;
+        var pattern = /^[A-Za-z\s]+ \([A-Za-z\s]+\)$/; // Allow letters and spaces in the format "Name (Suffix)"
+
+        if (postoffice.length === 0) {
+            $("#postoffice-error").html("Post Office is required").css("color", "red");
+            return false;
+        }
+
+        if (postoffice.length < required || !pattern.test(postoffice)) {
+            $("#postoffice-error").html("Please enter a valid post office name like 'KJHDFGY (PO)'").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#postoffice-error").html("Post Office is valid").css("color", "green");
+        return true;
+    }
+
+
+    function validateStreet() {
+        var street = $("#Edited_Street").val().trim();
+        var required = 3;
+        var left = required - street.length;
+
+        if (street.length === 0) {
+            $("#street-error").html("Street name is required").css("color", "red");
+            return false;
+        }
+
+        // Use a regular expression to allow only letters and spaces
+        var pattern = /^[A-Za-z\s]+$/;
+
+        if (!pattern.test(street) || left > 0) {
+            $("#street-error").html("Please enter a valid Street name").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#street-error").html("Street name is valid").css("color", "green");
+        return true;
+    }
+
+    function validateCity() {
+        var city = $("#Edited_City").val().trim();
+        var required = 3;
+        var left = required - city.length;
+
+        if (city.length === 0) {
+            $("#city-error").html("City name is required").css("color", "red");
+            return false;
+        }
+
+        // Use a regular expression to allow only letters and spaces
+        var pattern = /^[A-Za-z\s]+$/;
+
+        if (!pattern.test(city) || left > 0) {
+            $("#city-error").html("Please enter a valid City name").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#city-error").html("City name is valid").css("color", "green");
+        return true;
+    }
+
+    function validateState() {
+        var state = $("#Edited_State").val().trim();
+        var required = 3;
+        var left = required - state.length;
+
+        if (state.length === 0) {
+            $("#state-error").html("State name is required").css("color", "red");
+            return false;
+        }
+
+        // Use a regular expression to allow only letters and spaces
+        var pattern = /^[A-Za-z\s]+$/;
+
+        if (!pattern.test(state) || left > 0) {
+            $("#state-error").html("Please enter a valid State name").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#state-error").html("State name is valid").css("color", "green");
+        return true;
+    }
+
+    function validateCountry() {
+        var country = $("#Edited_Country").val().trim();
+        var required = 3;
+        var left = required - country.length;
+
+        if (country.length === 0) {
+            $("#country-error").html("Country name is required").css("color", "red");
+            return false;
+        }
+
+        // Use a regular expression to allow only letters and spaces
+        var pattern = /^[A-Za-z\s]+$/;
+
+        if (!pattern.test(country) || left > 0) {
+            $("#country-error").html("Please enter a valid Country name").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#country-error").html("Country name is valid").css("color", "green");
+        return true;
+    }
+
+
+    function validatePincode() {
+        var pincode = $("#Edited_Pin_code").val().trim(); // Use the correct ID for the pin code input
+        var pattern = /^[1-9]\d{5}$/; // Regular expression pattern for Indian pin code
+
+        if (!pattern.test(pincode)) {
+            $("#pincode-error").html("Please enter a valid Indian pin code").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#pincode-error").html("Pin code is valid").css("color", "green");
+        return true;
+    }
+</script>
+{% endblock %}

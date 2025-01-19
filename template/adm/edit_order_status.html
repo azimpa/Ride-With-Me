@@ -1,0 +1,32 @@
+{% extends 'adm/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header text-center">
+        <h3>EDIT ORDER STATUS</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <form method="post" action="{% url 'edit_order_status' order_items.id %}" class="mx-auto"
+                style="max-width: 300px;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name" style="margin-left: 80px;">ORDER STATUS</label>
+                    <select class="form-control" name="edited_order_status" required>
+                        <option value="" disabled>Select a Status</option>
+                        <option value="Order Placed" {% if order_items.order_status == 'Order Placed' %}selected{% endif %}>Order Placed</option>
+                        <option value="Shipped" {% if order_items.order_status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                        <option value="Delivered" {% if order_items.order_status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                        <option value="Cancelled" {% if order_items.order_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>                
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-primary" style="width: 150px;">SAVE EDITS</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

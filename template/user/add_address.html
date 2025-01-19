@@ -1,0 +1,240 @@
+{% extends 'user/base_user.html' %}
+
+{% block content %}
+<div style="margin-top: 150px;">
+    <div class="container my-5">
+        <div class="card">
+            <div class="card-body">
+                <form action="{% url 'add_address' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-row text-center mb-4">
+                        <div class="col">
+                            <h2>Add Address</h2>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Housename_companyname">House Name or Company Name:</label>
+                            <input type="text" class="form-control" id="Housename_companyname"
+                                name="Housename_companyname" placeholder="House Name or Company Name"
+                                onkeyup="validateName()">
+                            <div id="name-error"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="inputPostOffice">Post Office:</label>
+                            <input type="text" class="form-control" id="inputPostOffice" name="Post_office"
+                                placeholder="Post Office" onkeyup="validatePostoffice()">
+                            <div id="postoffice-error"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="inputStreet">Street:</label>
+                            <input type="text" class="form-control" id="inputStreet" name="Street" placeholder="Street"
+                                onkeyup="validateStreet()">
+                            <div id="street-error"></div> 
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="inputCity">City:</label>
+                            <input type="text" class="form-control" id="inputCity" name="City" placeholder="City"
+                                onkeyup="validateCity()">
+                            <div id="city-error"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="inputState">State:</label>
+                            <input type="text" class="form-control" id="inputState" name="State" placeholder="State"
+                                onkeyup="validateState()">
+                            <div id="state-error"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="inputCountry">Country:</label>
+                            <input type="text" class="form-control" id="inputCountry" name="Country"
+                                placeholder="Country" onkeyup="validateCountry()">
+                            <div id="country-error"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="inputPinCode">Pin Code:</label>
+                            <input type="text" class="form-control" id="inputPinCode" name="Pin_code"
+                                placeholder="Pin Code" onkeyup="validatePincode()">
+                            <div id="pincode-error"></div>
+                        </div>
+                    </div>
+                    <div class="form-row text-center">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">ADD ADDRESS</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("submit", "form", function (e) {
+        if (
+            !validateName() ||
+            !validatePostoffice() ||
+            !validateStreet() ||
+            !validateCity() ||
+            !validateState() ||
+            !validateCountry() ||
+            !validatePincode()
+        ) {
+            e.preventDefault();
+            swal("Invalid data! Ensure you have entered correct data");
+        }
+    });
+
+    function validateName() {
+        var name = $("#Housename_companyname").val().trim();
+        var required = 2;
+        var pattern = /^[A-Za-z\s]+ \([A-Za-z\s]+\)$/; // Allow letters and spaces in the format "Name (Suffix)"
+
+        if (name.length === 0) {
+            $("#name-error").html("House Name or Company Name is required").css("color", "red");
+            return false;
+        }
+
+        if (name.length < required || !pattern.test(name)) {
+            $("#name-error").html("Please enter a valid name like 'AWXWDS (H)'").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#name-error").html("House Name or Company Name is valid").css("color", "green");
+        return true;
+    }
+
+    function validatePostoffice() {
+        var postoffice = $("#inputPostOffice").val().trim();
+        var required = 2;
+        var pattern = /^[A-Za-z\s]+ \([A-Za-z\s]+\)$/; // Allow letters and spaces in the format "Name (Suffix)"
+
+        if (postoffice.length === 0) {
+            $("#postoffice-error").html("Post Office is required").css("color", "red");
+            return false;
+        }
+
+        if (postoffice.length < required || !pattern.test(postoffice)) {
+            $("#postoffice-error").html("Please enter a valid post office name like 'KJHDFGY (PO)'").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#postoffice-error").html("Post Office is valid").css("color", "green");
+        return true;
+    }
+
+
+    function validateStreet() {
+        var street = $("#inputStreet").val().trim();
+        var required = 3;
+        var left = required - street.length;
+
+        if (street.length === 0) {
+            $("#street-error").html("Street name is required").css("color", "red");
+            return false;
+        }
+
+        // Use a regular expression to allow only letters and spaces
+        var pattern = /^[A-Za-z\s]+$/;
+
+        if (!pattern.test(street) || left > 0) {
+            $("#street-error").html("Please enter a valid Street name").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#street-error").html("Street name is valid").css("color", "green");
+        return true;
+    }
+
+    function validateCity() {
+        var city = $("#inputCity").val().trim();
+        var required = 3;
+        var left = required - city.length;
+
+        if (city.length === 0) {
+            $("#city-error").html("City name is required").css("color", "red");
+            return false;
+        }
+
+        // Use a regular expression to allow only letters and spaces
+        var pattern = /^[A-Za-z\s]+$/;
+
+        if (!pattern.test(city) || left > 0) {
+            $("#city-error").html("Please enter a valid City name").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#city-error").html("City name is valid").css("color", "green");
+        return true;
+    }
+
+    function validateState() {
+        var state = $("#inputState").val().trim();
+        var required = 3;
+        var left = required - state.length;
+
+        if (state.length === 0) {
+            $("#state-error").html("State name is required").css("color", "red");
+            return false;
+        }
+
+        // Use a regular expression to allow only letters and spaces
+        var pattern = /^[A-Za-z\s]+$/;
+
+        if (!pattern.test(state) || left > 0) {
+            $("#state-error").html("Please enter a valid State name").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#state-error").html("State name is valid").css("color", "green");
+        return true;
+    }
+
+    function validateCountry() {
+        var country = $("#inputCountry").val().trim();
+        var required = 3;
+        var left = required - country.length;
+
+        if (country.length === 0) {
+            $("#country-error").html("Country name is required").css("color", "red");
+            return false;
+        }
+
+        // Use a regular expression to allow only letters and spaces
+        var pattern = /^[A-Za-z\s]+$/;
+
+        if (!pattern.test(country) || left > 0) {
+            $("#country-error").html("Please enter a valid Country name").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#country-error").html("Country name is valid").css("color", "green");
+        return true;
+    }
+
+
+    function validatePincode() {
+        var pincode = $("#inputPinCode").val().trim(); // Use the correct ID for the pin code input
+        var pattern = /^[1-9]\d{5}$/; // Regular expression pattern for Indian pin code
+
+        if (!pattern.test(pincode)) {
+            $("#pincode-error").html("Please enter a valid Indian pin code").css("color", "red");
+            return false;
+        }
+
+        // Clear previous error messages if the input is now valid
+        $("#pincode-error").html("Pin code is valid").css("color", "green");
+        return true;
+    }
+</script>
+{% endblock %}

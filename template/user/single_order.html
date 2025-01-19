@@ -1,0 +1,230 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+
+{% block title %}
+Order Details
+{% endblock title %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+
+    .list-unstyled li {
+        margin-bottom: 10px;
+    }
+
+    .product-card {
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card h6 {
+        margin-top: 15px;
+        font-size: 1.1em;
+        margin-bottom: 5px;
+    }
+
+    .product-card p {
+        margin-bottom: 5px;
+        font-size: 0.9em;
+    }
+
+    .btn-section {
+        justify-content: center;
+    }
+
+    .btn-cancel,
+    .btn-return {
+        padding: 8px 18px;
+        font-size: 0.9em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-cancel {
+        background-color: #e57373;
+        color: #fff;
+    }
+
+    .btn-cancel:hover {
+        background-color: #ef5350;
+    }
+
+    .btn-return {
+        background-color: #4caf50;
+        /* Change the background color */
+        color: #fff;
+        padding: 7px 24px;
+        /* Add padding for a better button size */
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-return:hover {
+        background-color: #388e3c;
+        /* Darker green on hover */
+    }
+
+    .return-checkbox-container {
+        margin-top: 10px;
+    }
+
+    #return_section {
+        margin-top: 10px;
+    }
+
+    #return_section textarea {
+        max-width: 100%; /* Ensure it doesn't exceed the card's width */
+        padding: 10px;
+    }
+</style>
+<div style="margin-top: 150px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card shipping-address">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4"><strong>SHIPPING ADDRESS</strong></h4>
+                        <ul class="list-unstyled">
+                            <li><strong>Name:</strong> {{ order.address.user }}</li>
+                            <li><strong>Phone:</strong> {{ order.address.user.phone_number }}</li>
+                            <li><strong>House:</strong> {{ order.address.name }}</li>
+                            <li><strong>Street:</strong> {{ order.address.street }}</li>
+                            <li><strong>City:</strong> {{ order.address.city }}</li>
+                            <li><strong>State:</strong> {{ order.address.state }}</li>
+                            <li><strong>Country:</strong> {{ order.address.country }}</li>
+                            <li><strong>Pin code:</strong> {{ order.address.pin_code }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card order-details mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4"><strong>ORDER DETAILS</strong></h4>
+                        <ul class="list-unstyled">
+                            <li><strong>Order ID :</strong> {{ order.id }}</li>
+                            <li><strong>Payment method :</strong> <br>{{ order.payment_method }}</li>
+                            <li><strong>Total price :</strong> ₹ {{ order.total_price }}</li>
+                            <li><strong>Discount :</strong> ₹ {{ order.coupon_discount }}</li>
+                            <li><strong>Shipping fee :</strong> ₹ 50</li>
+                            <li><strong>Applicable Tax rate:</strong> 2 %</li>
+                            <li><strong>Total amount :</strong> ₹ {{ order.total_price_tax }} <br>(Inclusive of
+                                Taxes and Shipping) </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    {% for order_item in order_item %}
+                    <div class="col-md-4">
+                        <div class="product-card card border-1 mb-4" style="min-height: 550px;">
+                                {% for img in order_item.product.images.all %}
+                                {% if forloop.first %}
+                                <img class="img-fluid" src="{{img.image.url}}" alt="">
+                                {% endif %}
+                                {% endfor %}
+                            <div class="card-body">
+                                <h6 class="text-center"><Strong>{{ order_item.product.product }}</Strong></h6>
+                                <p class="text-center">Size: <strong>{{ order_item.product.size }}</strong></p>
+                                <p class="text-center">Price: <strong>{{ order_item.product.offer_price }}</strong></p>
+                                <p class="text-center">Category:
+                                    <strong>{{order_item.product.product.category}}</strong>
+                                </p>
+                                <p class="text-center">Color: <strong>{{ order_item.product.color }}</strong></p>
+                                <p class="text-center">Quantity: <strong>{{ order_item.quantity}}</strong></p>
+                                <p class="text-center">Order Status: <strong>{{ order_item.order_status }}</strong></p>
+                                {% if order_item.order_status == 'Return Requested' %}
+                                <p class="text-center">Reason: {{ order_item.return_reason }}</p>
+                                {% endif %}
+                                <div class="btn-section">
+                                    {% if order_item.order_status == 'Order Placed' or order_item.order_status == 'Shipped'%}
+                                    <form method="post"
+                                        action="{% url 'cancel_order' order_item.order.id order_item.product.id %}?source=single_order">
+                                        {% csrf_token %}
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-sm btn-cancel">CANCEL</button>
+                                        </div>
+                                    </form>
+                                    {% elif order_item.order_status == 'Delivered' %}
+                                    <div class="return-checkbox-container text-center">
+                                        <input type="checkbox" id="return_checkbox">
+                                        <label for="return_checkbox" class="form-label">Want to Return</label>
+                                    </div>
+                                    <div id="return_section">
+                                        <form method="post"
+                                            action="{% url 'return_order' order_item.order.id order_item.product.id %}">
+                                            {% csrf_token %}
+                                            <textarea class="form-control" id="return_reason" name="return_reason"
+                                                rows="4" placeholder="Enter your reason for return" required></textarea>
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-sm btn-return">RETURN</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get references to the checkbox and return section
+        const returnCheckbox = document.getElementById("return_checkbox");
+        const returnSection = document.getElementById("return_section");
+
+        // Function to toggle the visibility of the return section
+        function toggleReturnSection() {
+            if (returnCheckbox.checked) {
+                returnSection.style.display = "block";
+            } else {
+                returnSection.style.display = "none";
+            }
+        }
+
+        // Add an event listener to the checkbox to trigger the toggle function
+        returnCheckbox.addEventListener("change", toggleReturnSection);
+
+        // Initial call to set the initial visibility based on checkbox state
+        toggleReturnSection();
+    });
+</script>
+{% endblock content %}
